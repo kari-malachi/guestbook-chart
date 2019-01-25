@@ -1,0 +1,46 @@
+# Default values for guestbook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+metadata:
+  domain: majustfortesting.com
+
+redisMaster:
+  replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  ports:
+    containerPort: 6379
+    servicePort: 6379
+
+redisSlave:
+  replicaCount: 2
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  ports:
+    containerPort: 6379
+    servicePort: 6379
+
+frontend:
+  replicaCount: 3
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+
+  ports:
+    containerPort: 80
+    servicePort: 80
+
+ingress:
+  serviceName: guestbook
+  backendName: guestbook-frontend
+  ports:
+    servicePort: 80

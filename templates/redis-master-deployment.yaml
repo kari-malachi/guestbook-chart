@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-redis-master
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "guestbook.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.redisMaster.name }}"
+    release: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      role: master
+      tier: backend
+  replicas: {{ .Values.redisMaster.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: k8s.gcr.io/redis:e2e  # or just image: redis
+        resources:
+          requests:
+            cpu: {{ .Values.redisMaster.resources.requests.cpu }}
+            memory: {{ .Values.redisMaster.resources.requests.memory }}
+        ports:
+        - containerPort: {{ .Values.redisMaster.ports.containerPort }}

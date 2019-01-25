@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-redis-slave
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: redis
+    role: slave
+    tier: backend
+spec:
+  ports:
+  - port: {{ .Values.redisMaster.ports.servicePort }}
+  selector:
+    app: redis
+    role: slave
+    tier: backend
